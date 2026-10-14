@@ -1,5 +1,5 @@
 """
-mcq.py - MC question compiler for far-courses.
+mcq.py - MC question compiler for social-media.
 """
 
 from __future__ import annotations
@@ -136,7 +136,7 @@ def write_jsonl(questions: List[MCQuestion], path: str) -> None:
 
 def main():
     import argparse
-    p = argparse.ArgumentParser(description="MC question compiler for far-courses")
+    p = argparse.ArgumentParser(description="MC question compiler for social-media")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     ing = sub.add_parser("ingest", help="ingest a CSV file")

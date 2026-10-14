@@ -2,7 +2,7 @@
 name: mcq-ingest
 description: >-
   Use when the user wants to ingest multiple-choice question banks (CSV, PDF, PHP)
-  into the far-courses pipeline. Triggers: ingest MCQs, import questions, CSV to course.
+  into the social-media pipeline. Triggers: ingest MCQs, import questions, CSV to course.
 
 canonical MCQuestion schema: question_id (sha256[:16]), stem, choices, answer,
 explanation, source, subject_area, level. The 1-bit veto gate checks

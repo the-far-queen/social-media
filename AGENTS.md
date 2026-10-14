@@ -1,4 +1,4 @@
-# AGENTS.md - (far-courses repo)
+# AGENTS.md - (social-media repo)
 
 > A course is not a vibe.
 

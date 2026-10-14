@@ -1,5 +1,5 @@
 """
-gate.py - 1-bit veto gate for far-courses assets.
+gate.py - 1-bit veto gate for social-media assets.
 """
 
 from __future__ import annotations

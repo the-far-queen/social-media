@@ -1,4 +1,4 @@
-# far-courses
+# social-media
 
 **Free academic content + test prep + course pipeline.**
 
@@ -17,8 +17,8 @@ Paste it at the start of any project.
 ## Quick start
 
 ```bash
-git clone https://github.com/the-far-queen/far-courses.git
-cd far-courses
+git clone https://github.com/the-far-queen/social-media.git
+cd social-media
 # Read AGENTS.md
 # Look at examples/AP-English-test-1.php for the format
 # Compile your course: python tools/mcq.py course.yaml
@@ -28,7 +28,7 @@ cd far-courses
 ## Repo layout
 
 ```
-far-courses/
+social-media/
 ├── AGENTS.md
 ├── README.md
 ├── LICENSE
