@@ -20,7 +20,7 @@ This is not a proxy for comprehension and does not claim to be. It is a
 floor: a text that fails this cannot be read by a newcomer at all, whatever
 the author's intent.
 
-WHY IT MATTERS HERE. social-media, far-writing, far-math and the rest are
+WHY IT MATTERS HERE. social-media, far-writing, fieldcore and the rest are
 the medium the curriculum travels in. If they only work for people already
 inside the project, the "free schools without a price" framing is a
 distribution claim rather than a transmission claim, and those are very

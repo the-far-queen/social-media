@@ -106,11 +106,24 @@ def ingest_php_test_page(path: str) -> List[MCQuestion]:
         if not m_stem:
             continue
         stem = m_stem.group(1).strip()
-        choices = re.findall(r'value="([A-Z])\.\s*([^"<>]+?)(?=">|"\s|\s<|$)', block)
+        # The choice inputs in examples/ use SINGLE quotes
+        # (value='A. Abstraction'), not double quotes. Demanding double
+        # quotes made findall return nothing, so every block was skipped
+        # before the answer key was even read -- the parser returned 0
+        # questions and test_t10_ingest_php failed. Accept either quote
+        # style on both sides.
+        choices = re.findall(r"value=['\"]([A-Z])\.\s*([^'\"<>]+?)(?=['\"]>|['\"]\s|\s<|$)", block)
         if not choices:
             continue
         choice_texts = [c[1].strip() for c in choices]
-        m_ans = re.search(r'name="key\d+"\s+value="([A-Z])', block)
+        # The answer key is a hidden input. The pages in examples/ use SINGLE
+        # quotes (name='key1' value='D. Condescending') while the regex
+        # demanded double quotes, so every block was skipped and the parser
+        # returned 0 questions -- which is what test_t10_ingest_php was
+        # reporting. Accept either quote style. The value also carries the
+        # answer text after the letter ("D. Condescending"), so the letter
+        # is taken from the front and the rest discarded.
+        m_ans = re.search(r"name=['\"]key\d+['\"]\s+value=['\"]([A-Z])[.\s]", block)
         if not m_ans:
             continue
         answer = m_ans.group(1)

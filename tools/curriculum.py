@@ -88,7 +88,7 @@ TIER2: tuple[Domain, ...] = (
     Domain("geometry", TIER_2_SUBSTRATE,
            "relational structure without measurement; the substrate's shape",
            True, True, True,
-           note="far-math holds the layer rule; the Clifford torus and Hopf map are computed"),
+           note="fieldcore/src/farmath holds the layer rule; the Clifford torus and Hopf map are computed"),
     Domain("logic", TIER_2_SUBSTRATE, "validity; the formal substrate all of Tier 1 rests on",
            True, True, True),
     Domain("semantics", TIER_2_SUBSTRATE, "meaning as structure rather than lookup",
@@ -151,7 +151,7 @@ TIER1: tuple[Domain, ...] = (
                 "measured, 0.03 MB on disk."),
     Domain("film", TIER_1_INSTRUMENTS, "a container: writing + art + music + engineering in one",
            False, True, True,
-           note="CHECKABLE: far-film ships tools/gate.py + tests/test_shot.py. "
+           note="CHECKABLE: far-art ships tools/gate_shot.py + tests/test_shot.py. "
                 "NOT YET TRANSMISSIBLE: nothing measured; 0.94 MB corpus."),
     Domain("apps", TIER_1_INSTRUMENTS, "a container: engineering + design + law + business",
            True, True, True),

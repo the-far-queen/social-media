@@ -160,8 +160,8 @@ def test_containers_are_deferred_on_transmission_not_rigor():
     not because art is unrigorous.
 
     The first version of the gate marked them checkable=False. That was
-    wrong: far-music and far-film ship tools/gate.py plus tests, and
-    far-art ships 14 schema files. A red-able check exists. The honest
+    wrong: far-art ships tools/gate.py and tools/gate_shot.py plus tests,
+    and 14 schema files. A red-able check exists. The honest
     reason is transmission -- no document has been measured under 50%
     prerequisite load, and the corpus holds 0.03-0.94 MB.
 

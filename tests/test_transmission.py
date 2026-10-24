@@ -72,7 +72,7 @@ def test_a_text_that_defines_everything_is_self_contained():
 
 
 def test_a_text_that_assumes_the_reader_knows_is_not():
-    """The measured finding on far-math/docs/02: a 713-word document
+    """The measured finding on the math docs (fieldcore/docs/Math/02): a 713-word document
     using six domain terms and defining none of them.
     """
     text = ("The manifold carries the state. The heegaard splitting gives the "
@@ -192,10 +192,10 @@ def test_far_math_tier2_docs_are_self_contained():
     Kept as a test against the real artifact rather than a fixture,
     because the artifact is what actually gets read.
     """
-    doc = (Path(__file__).resolve().parents[2] / "far-math" / "docs"
+    doc = (Path(__file__).resolve().parents[2] / "fieldcore" / "docs" / "Math"
            / "02-geometry-reconciled.md")
     if not doc.exists():
-        pytest.skip("far-math not present beside this repo")
+        pytest.skip("fieldcore not present beside this repo")
     text = doc.read_text(encoding="utf-8")
     gl = [Term(t, "x", "math") for t in
           ("manifold", "harmonic", "clifford torus", "heegaard splitting",
