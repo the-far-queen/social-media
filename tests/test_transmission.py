@@ -59,6 +59,67 @@ def test_find_definitions_of_empty_text():
     assert find_definitions("") == {}
 
 
+def test_find_definitions_reads_the_axis_form():
+    """**THE AXIS FORM IS A DEFINITION SITE.**
+
+    MEASURED 2026-10-31: the sacred library's five-part qualifications
+    name their axis like this --
+
+        **Axis moved:** `truth_before_comfort`.
+        **Current value:** I treat a text's value as what it tells me to believe.
+        **Intended value:** I treat a text's value as what it makes me able to do.
+
+    The two value lines ARE the definition -- they say what the term
+    means here -- but the TERM is named on the "Axis moved" line, in a
+    form the instrument did not recognise. So all 27 qualifications
+    measured at 100% load, with the axis name as the single missing
+    term, while the definition sat two lines above it.
+
+    **A measurement instrument that cannot read the artifact it
+    measures is worse than no instrument, because the number is
+    confidently wrong.** This is the same failure as the bold-dash
+    glossary form, in a different shape.
+    """
+    text = (
+        "**Axis moved:** `truth_before_comfort`.\n"
+        "\n"
+        "**Current value:** I treat a text's value as what it tells me to believe.\n"
+        "\n"
+        "**Intended value:** I treat a text's value as what it makes me able to do.\n"
+    )
+    d = find_definitions(text)
+    assert "truth_before_comfort" in d, (
+        "the axis form was not read as a definition; the terms found: %s"
+        % sorted(d))
+    body = d["truth_before_comfort"]
+    assert "tells me to believe" in body, body
+    assert "makes me able to do" in body, (
+        "the definition carries only one side of the move: %r" % body)
+
+
+def test_the_axis_form_makes_a_qualification_self_contained():
+    """**AND THE DOCUMENT MEASURES AT 0% LOAD, NOT 100%.**
+
+    The end-to-end version of the check above: with the axis defined
+    inline, the term is no longer an undefined prerequisite, so the
+    load falls to zero. Before the fix this document measured 100%.
+    """
+    glossary = [Term("truth_before_comfort", "", "axis")]
+    text = (
+        "**Axis moved:** `truth_before_comfort`.\n"
+        "**Current value:** I treat a text's value as what it tells me to believe.\n"
+        "**Intended value:** I treat a text's value as what it makes me able to do.\n"
+        "The axis `truth_before_comfort` is what this text moves.\n"
+    )
+    r = measure(text, glossary)
+    assert r.terms_used, "the term was not seen as used at all"
+    assert r.undefined == [], (
+        "the axis is undefined even though the document defines it: %s"
+        % r.undefined)
+    assert r.load == 0.0, (
+        "the document measured %.1f%% load; it should be 0%%" % (100 * r.load))
+
+
 # --------------------------------------------------------------------- measure
 
 

@@ -70,6 +70,33 @@ def find_definitions(text: str) -> dict[str, str]:
         s = raw.strip()
         if not s or s.startswith(("#", "|", ">", "`")):
             continue
+        # **AND THE AXIS FORM, WHICH IS A DEFINITION SITE.** MEASURED
+        # 2026-10-31: the sacred library's five-part qualifications
+        # write their axis as
+        #
+        #     **Axis moved:** `truth_before_comfort`.
+        #     **Current value:** I treat a text's value as ...
+        #     **Intended value:** I treat a text's value as ...
+        #
+        # The "Current value" and "Intended value" lines ARE the
+        # definition -- they say what the term MEANS here -- but the
+        # term itself is named on the "Axis moved" line, in a form the
+        # regex below did not match. So every one of the 27
+        # qualifications measured at 100% load, with the axis name as
+        # the single missing term, while the definition sat two lines
+        # above it.
+        #
+        # **A measurement instrument that cannot read the artifact it
+        # measures is worse than no instrument, because the number is
+        # confidently wrong** -- which is the same failure the glossary
+        # bold-dash form caused above, in a different shape.
+        axis = _AXIS_MOVED.match(s)
+        if axis:
+            term = axis.group(1).strip().lower()
+            body = _axis_body(text, raw)
+            if body:
+                out.setdefault(term, body)
+            continue
         # Strip a leading bullet, because a glossary entry is written as
         # a bullet. The table and heading filters above are what exclude
         # structural lines; a length floor was tried and removed because
@@ -88,6 +115,58 @@ def find_definitions(text: str) -> dict[str, str]:
             if len(term) >= 3:
                 out.setdefault(term, body[:200])
     return out
+
+
+#: THE AXIS FORM. `**Axis moved:** `term`` -- the term is named here and
+#: defined on the two lines below it.
+#:
+#: **AND THE COLON IS INSIDE THE BOLD MARKERS.** MEASURED 2026-10-31:
+#: the first version of this pattern was `\*{0,2}Axis moved\*{0,2}\s*:`,
+#: which asks for the colon AFTER the closing `**`. The real form is
+#: `**Axis moved:**`, so the pattern never matched and the fix was
+#: invisible -- the module imported, the function ran, and it returned
+#: the same three definitions as before.
+_AXIS_MOVED = re.compile(
+    r"^\*{0,2}Axis moved\s*:\s*\*{0,2}\s*`?([A-Za-z0-9_ -]{3,48}?)`?"
+    r"\s*\.?\s*\*{0,2}\s*$",
+    re.IGNORECASE)
+
+#: The two value lines that follow the axis name. Same shape: the colon
+#: is inside the bold markers.
+_CURRENT = re.compile(
+    r"^\*{0,2}Current value\s*:\s*\*{0,2}\s*(.+?)\s*\*{0,2}\s*$",
+    re.IGNORECASE)
+_INTENDED = re.compile(
+    r"^\*{0,2}Intended value\s*:\s*\*{0,2}\s*(.+?)\s*\*{0,2}\s*$",
+    re.IGNORECASE)
+
+
+def _axis_body(text: str, axis_line: str) -> str:
+    """the definition that follows the "Axis moved" line.
+
+    **AND THE BODY IS THE INTENDED VALUE, WITH THE CURRENT VALUE BOTH
+    PLACED -- because the axis is a MOVE, and a definition of only one
+    side of a move is not a definition of the term.**
+    """
+    lines = text.splitlines()
+    try:
+        start = lines.index(axis_line)
+    except ValueError:
+        return ""
+    current = intended = ""
+    for raw in lines[start + 1:start + 8]:
+        s = raw.strip()
+        m = _CURRENT.match(s)
+        if m:
+            current = m.group(1).strip()
+            continue
+        m = _INTENDED.match(s)
+        if m:
+            intended = m.group(1).strip()
+            break
+    if current and intended:
+        return ("currently %s; intended %s" % (current, intended))[:200]
+    return (current or intended)[:200]
 
 
 @dataclass
